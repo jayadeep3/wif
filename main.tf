@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "my-bucket" {
-  name          = "bkt-demo-000"
+  name          = "wif-demo-001"
   location      = "asia-south1"
   project = "tt-dev-001"
   force_destroy = true
@@ -7,7 +7,7 @@ resource "google_storage_bucket" "my-bucket" {
 }
 
 resource "google_storage_bucket" "my-bucket2" {
-  name          = "bkt-demo-002"
+  name          = "wif-demo-002"
   location      = "asia-south1"
   project = "tt-dev-001"
   force_destroy = true
