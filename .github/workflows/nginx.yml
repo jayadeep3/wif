@@ -1,0 +1,83 @@
+name: nginx
+on:
+  workflow_dispatch:  # Enable manual triggering
+    inputs:
+      tag_id:
+        description: 'Tag ID'
+        required: true
+      branch_name:
+        description: 'Branch Name'
+        required: true
+
+env:
+  PROJECT_ID: clever-dolphin-443009-c9
+  GKE_LOCATION: asia-south1 # TODO: update region of the Artifact Registry
+  GKE_CLUSTER: demo    # TODO: update to cluster name
+  # GKE_ZONE: asia-south1-a   # TODO: update to cluster zone
+  # DEPLOYMENT_NAME: engro-xms-dev-user-pod # TODO: update to deployment name
+  # REPOSITORY: engro-xms-dev-frontend # TODO: update to Artifact Registry docker repository
+  IMAGE: nginx
+  NAMESPACE: demo
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: test
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    # Authentication via Workload Identity Federation
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        project_id: $PROJECT_ID
+        workload_identity_provider: 'projects/39570659251/locations/global/workloadIdentityPools/github-wif/providers/github-actions'
+
+    - name: Docker configuration
+      run: |-
+        gcloud auth configure-docker \
+        asia-south1-docker.pkg.dev
+    # Get the GKE credentials so we can deploy to the cluster
+    - name: Set up GKE credentials
+      uses: google-github-actions/get-gke-credentials@v2
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_LOCATION }}
+
+    # Build the Docker image
+    # - name: Build
+    #   run: |-
+    #     cd xms/core/api/frontend-api
+    #     docker build -t $IMAGE . --build-arg CONFIG_FILE=xmsdev-gcp.json
+    #     docker tag $IMAGE:latest $GKE_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:"${{ inputs.tag_id }}"
+    # # Push the Docker image to Google Artifact Registry
+    # - name: Publish
+    #   run: |-
+    #     docker push $GKE_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:"${{ inputs.tag_id }}"
+    # - name: "Set up Cloud SDK"
+    #   uses: google-github-actions/setup-gcloud@v2
+    #   with:
+    #       install_components: 'gke-gcloud-auth-plugin'
+    # - name: gcloud version & install kubectl
+    #   run: |-
+    #     gcloud components install kubectl
+    # - name: Configure Kubernetes credentials
+    #   run: |-
+    #     gcloud container clusters get-credentials $GKE_CLUSTER --region $GKE_LOCATION --project $PROJECT_ID
+    # - name: Retry kubectl command
+    #   run: |-
+    #       kubectl get pods -n engro-xms-dev
+    # # Checkout to another branch
+    # - name: clone the repository from dev branch
+    #   run: |-
+    #     git clone git@github.com:engrotech/pipeline-xms.git -b dev
+    #     cd pipeline-xms/deployments/services
+    # Deploy the Docker image to the GKE cluster
+    - name: clone the repository from dev branch & Deploy
+      run: |-
+        kubectl apply -f nginx.yaml
+    - name: checking pods
+      run: |-
+        kubectl get pods -n $NAMESPACE
