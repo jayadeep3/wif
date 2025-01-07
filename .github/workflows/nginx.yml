@@ -43,8 +43,9 @@ jobs:
     - id: 'get-credentials'
       uses: 'google-github-actions/get-gke-credentials@v2'
       with:
-        cluster_name: ${{ env.GKE_CLUSTER }}
-        location: ${{ env.GKE_LOCATION }}
+        cluster_name: $GKE_CLUSTER
+        location: $GKE_LOCATION
+        project_id: $PROJECT_ID
 
     # Build the Docker image
     # - name: Build
