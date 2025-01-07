@@ -10,7 +10,7 @@ env:
   # DEPLOYMENT_NAME: engro-xms-dev-user-pod # TODO: update to deployment name
   # REPOSITORY: engro-xms-dev-frontend # TODO: update to Artifact Registry docker repository
   IMAGE: nginx
-  NAMESPACE: demo
+  NAMESPACE: test
 
 jobs:
   setup-build-publish-deploy:
