@@ -27,7 +27,6 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
-        project_id: clever-dolphin-443009-c9
         workload_identity_provider: 'projects/39570659251/locations/global/workloadIdentityPools/github-wif/providers/github-actions'
         service_account: github-wif@clever-dolphin-443009-c9.iam.gserviceaccount.com
 
@@ -40,7 +39,6 @@ jobs:
       with:
         cluster_name: demo
         location: asia-south1
-        project_id: clever-dolphin-443009-c9
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
