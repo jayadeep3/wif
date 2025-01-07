@@ -1,13 +1,6 @@
 name: nginx
 on:
   workflow_dispatch:  # Enable manual triggering
-    inputs:
-      tag_id:
-        description: 'Tag ID'
-        required: true
-      branch_name:
-        description: 'Branch Name'
-        required: true
 
 env:
   PROJECT_ID: clever-dolphin-443009-c9
