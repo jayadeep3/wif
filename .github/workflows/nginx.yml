@@ -13,8 +13,10 @@ env:
   NAMESPACE: test
 
 jobs:
-  setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+  job_id:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     runs-on: ubuntu-latest
     environment: test
 
@@ -68,7 +70,7 @@ jobs:
     #     git clone git@github.com:engrotech/pipeline-xms.git -b dev
     #     cd pipeline-xms/deployments/services
     # Deploy the Docker image to the GKE cluster
-    - name: clone the repository from dev branch & Deploy
+    - name: Deploy
       run: |-
         kubectl apply -f nginx.yaml
     - name: checking pods
