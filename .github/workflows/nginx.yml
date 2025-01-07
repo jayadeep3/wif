@@ -29,6 +29,7 @@ jobs:
       with:
         project_id: clever-dolphin-443009-c9
         workload_identity_provider: 'projects/39570659251/locations/global/workloadIdentityPools/github-wif/providers/github-actions'
+        service_account: github-wif@clever-dolphin-443009-c9.iam.gserviceaccount.com
 
     - name: Docker configuration
       run: |-
