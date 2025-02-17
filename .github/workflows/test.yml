@@ -1,0 +1,21 @@
+name: git-tag-test
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: test
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Ensures we get all branches
+    - name: Create Git Tag
+      run: |
+          TAG="v1.0.${{ github.run_number }}"  # Format the tag as v1.0.run_number
+          echo "Creating Git tag: $TAG"
